@@ -31,18 +31,11 @@ node {
 
    stage 'archive'
    archive 'target/*.jar'
-   stage('Sonarqube') {
-       environment {
-           scannerHome = tool 'SonarQubeScanner'
-       }
-       steps {
-           withSonarQubeEnv('sonarqube') {
-               sh "${scannerHome}/bin/sonar-scanner"
-           }
-           timeout(time: 10, unit: 'MINUTES') {
-               waitForQualityGate abortPipeline: true
-           }
-       }
+   stage 'Checkout'
+   checkout scm
+   stage 'Gradle Static Analysis'
+   withSonarQubeEnv {
+       sh "./gradlew clean sonarqube"
    }
 }
 
