@@ -30,6 +30,15 @@ node {
 
    stage 'archive'
    archive 'target/*.jar'
+   stage ('SonarQube Analysis'){
+   steps{
+   dir("${mvnHome}/bin/mvn"){
+   withSonarQubeEnv('SonarQube5.3') {
+   sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+   }
+   }
+   }
+   }
 }
 
 
