@@ -35,7 +35,8 @@ node {
    checkout scm
    stage 'Gradle Static Analysis'
    withSonarQubeEnv {
-       sh "${mvnHome}/bin/mvn clean sonarqube"
+       //sh "${mvnHome}/bin/mvn clean sonarqube"
+       sh "${mvnHome}/bin/mvn clean install sonar:sonar"
    }
 }
 
