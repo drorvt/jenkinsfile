@@ -10,5 +10,4 @@ public class DummyTests {
   @Test public void test1() {
     run();
   }
-
 }
