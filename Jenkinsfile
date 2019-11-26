@@ -30,14 +30,19 @@ node {
 
    stage 'archive'
    archive 'target/*.jar'
-   stage ('SonarQube Analysis'){
-   steps{
-   dir("${mvnHome}/bin/mvn"){
-   withSonarQubeEnv('SonarQube5.3') {
-   sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-   }
-   }
-   }
+
+   stage('Sonarqube') {
+       environment {
+           scannerHome = tool 'SonarQubeScanner'
+       }
+       steps {
+           withSonarQubeEnv('sonarqube') {
+               sh "${scannerHome}/bin/sonar-scanner"
+           }
+           timeout(time: 10, unit: 'MINUTES') {
+               waitForQualityGate abortPipeline: true
+           }
+       }
    }
 }
 
